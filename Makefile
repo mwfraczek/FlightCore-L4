@@ -15,8 +15,14 @@ all: bin/main.elf bin/main.bin
 bin/main.bin: bin/main.elf
 	$(OBJCOPY) -O binary bin/main.elf bin/main.bin
 
-bin/main.elf: build/gps.o build/usart.o build/utils.o build/peripherals.o build/bmp390.o build/i2c.o build/main.o build/startup.o build/system.o 
-	$(CC) $(CFLAGS) $(LDFLAGS) -o bin/main.elf build/gps.o build/usart.o build/utils.o build/peripherals.o build/bmp390.o build/i2c.o build/main.o build/startup.o build/system.o
+bin/main.elf: build/bmi088.o build/gps.o build/spi.o build/usart.o build/utils.o build/peripherals.o build/bmp390.o build/i2c.o build/main.o build/startup.o build/system.o 
+	$(CC) $(CFLAGS) $(LDFLAGS) -o bin/main.elf build/bmi088.o build/spi.o build/gps.o build/usart.o build/utils.o build/peripherals.o build/bmp390.o build/i2c.o build/main.o build/startup.o build/system.o
+
+build/bmi088.o: drivers/bmi088.c
+	$(CC) $(CFLAGS) -c drivers/bmi088.c -o build/bmi088.o
+
+build/spi.o: drivers/spi.c
+	$(CC) $(CFLAGS) -c drivers/spi.c -o build/spi.o
 
 build/gps.o: drivers/gps.c
 	$(CC) $(CFLAGS) -c drivers/gps.c -o build/gps.o

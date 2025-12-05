@@ -5,7 +5,7 @@ import csv
 from datetime import datetime
 
 # Setup serial port read
-ser = serial.Serial('/dev/ttyACM0', 9600, timeout=1)
+ser = serial.Serial('/dev/ttyACM1', 9600, timeout=1)
 
 # Format csv file 
 csv_filename = f"logs/UART2_log_{datetime.now().strftime('%Y%m%d_%H%M%S')}.csv"

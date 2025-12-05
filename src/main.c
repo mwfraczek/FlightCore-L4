@@ -6,6 +6,8 @@
 #include "bmp390.h"
 #include "usart.h"
 #include "gps.h"
+#include "spi.h"
+#include "bmi088.h"
 
 int main(void) {
 	// Variable Declarations
@@ -26,14 +28,17 @@ int main(void) {
 	usart3_init();
 	syscfg_enable();
 	exti_enable();
+	spi3_init();
 
 	// Interrupt Setup
 	NVIC_SetPriority(TIM2_IRQn, 4);
 	NVIC_EnableIRQ(TIM2_IRQn);  	// timer-base LED interrupt  
 	NVIC_SetPriority(USART3_IRQn, 3);
 	NVIC_EnableIRQ(USART3_IRQn);	// UART stream GPS interrupt
-	NVIC_SetPriority(EXTI9_5_IRQn, 2);
-	NVIC_EnableIRQ(EXTI9_5_IRQn);	// external sensor BMP390 interrupt
+	NVIC_SetPriority(EXTI15_10_IRQn, 2);
+	NVIC_EnableIRQ(EXTI15_10_IRQn);	// BMP390 external interrupt
+	NVIC_SetPriority(EXTI9_5_IRQn, 1);
+        NVIC_EnableIRQ(EXTI9_5_IRQn); // BMI088 external interrupt
 
 	// Wait For Ready Sensor 
 	if (bmp390_setup() != 0) led_blink_fast();
@@ -41,7 +46,10 @@ int main(void) {
 		if (bmp390_status(&bmpstatus) != 0)
 			led_blink_fast(); 
 	} while (bmpstatus != 0x70);
-	
+
+	// BMI088 Setup
+	bmi088_setup();
+
 	// Read and Convert Sensor Calibration Coefficients 
 	bmp390_coeffdata(&cal_raw);
         bmp390_coeffconvert(&cal_raw, &cal);
