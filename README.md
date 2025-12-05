@@ -37,43 +37,43 @@ This project contains embedded C firmware for the **STM32** Nucleo-L476RG, inter
 
 
 ## Directory Structure: 📂
-.
-├── bin/
-├── build/
-├── controls/
-│   ├── chute.c
-│   └── tvc.c
-├── drivers/
-│   ├── bmi088.c
-│   ├── bmp390.c
-│   ├── gps.c
-│   ├── i2c.c
-│   ├── peripherals.c
-│   ├── spi.c
-│   ├── usart.c
-│   └── utils.c
-├── inc/
-│   ├── bmi088.h
-│   ├── bmp390.h
-│   ├── cmsis
-│   │   ├── core/
-│   │   └── device/
-│   ├── gps.h
-│   ├── i2c.h
-│   ├── peripherals.h
-│   ├── spi.h
-│   ├── stm32l476.h
-│   ├── usart.h
-│   └── utils.h
-├── linker.ld
-├── log.py
-├── logs/
-├── Makefile
-├── README.md
-└── src/
-    ├── main.c
-    ├── startup.s
-    └── system.c
+    .
+    ├── bin/
+    ├── build/
+    ├── controls/
+    │   ├── chute.c
+    │   └── tvc.c
+    ├── drivers/
+    │   ├── bmi088.c
+    │   ├── bmp390.c
+    │   ├── gps.c
+    │   ├── i2c.c
+    │   ├── peripherals.c
+    │   ├── spi.c
+    │   ├── usart.c
+    │   └── utils.c
+    ├── inc/
+    │   ├── bmi088.h
+    │   ├── bmp390.h
+    │   ├── cmsis
+    │   │   ├── core/
+    │   │   └── device/
+    │   ├── gps.h
+    │   ├── i2c.h
+    │   ├── peripherals.h
+    │   ├── spi.h
+    │   ├── stm32l476.h
+    │   ├── usart.h
+    │   └── utils.h
+    ├── linker.ld
+    ├── log.py
+    ├── logs/
+    ├── Makefile
+    ├── README.md
+    └── src/
+        ├── main.c
+        ├── startup.s
+        └── system.c
 
 
 ## Contributions: 👤
