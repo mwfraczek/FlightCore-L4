@@ -5,7 +5,7 @@
 #include "peripherals.h"
 
 void rcc_enable(void) {
-	RCC_AHB2ENR  |= (3 << 0);  // Enable GPIOA & GPIOB clocks
+	RCC_AHB2ENR  |= (7 << 0);  // Enable GPIOA & GPIOB & GPIOC clocks
 	RCC_APB1ENR1 |= (1 << 21); // Enable I2C1 clock
 	RCC_CCIPR    |= (1 << 12); // Select SYSCLK (HSI16) as I2C1 source clock
 	RCC_APB1ENR1 |= (1 << 0);  // Enable TIM2 clock
@@ -13,11 +13,12 @@ void rcc_enable(void) {
 	RCC_CCIPR    |= (1 << 2);  // Select SYSCLK as USART2 clock	
 	RCC_APB1ENR1 |= (1 << 18); // Enable USART3 clock
 	RCC_CCIPR    |= (1 << 4);  // Select SYSCLK as USART3 clock
+	RCC_APB1ENR1 |= (1 << 15); // Enable SPI3 clock
 	RCC_APB2ENR  |= (1 << 0);  // Enable SYSCFG clock
 }
 
 void gpio_config(void) {
-	// Set Nucleo User LD2 LED 
+	// Set Nucleo User LD2 LED
 	GPIOA_MODER &= ~(3 << 10); 	// Clear PA5 bits
 	GPIOA_MODER |=  (1 << 10); 	// Set PA5 to output mode
 
@@ -29,10 +30,11 @@ void gpio_config(void) {
 	GPIOB_OTYPER |=  (3 << 8);    // Set PB8/PB9 to open-drain
 	GPIOB_PUPDR  &= ~(0xF << 16);   // Set NO pull up/downs (use external resistors)
 
+	// USED PREVIOUSLY AS DEBUG PIN
 	// Set GPIO debug pin (Nucleo D10 - PB6)
-	GPIOB_OSPEEDR |= (2 << 12);   // High speed
-	GPIOB_MODER &= ~(3 << 12);    // Clear PB6 bit
-	GPIOB_MODER |=  (1 << 12);    // Set PB6 to output mode
+	// GPIOB_OSPEEDR |= (2 << 12);   // High speed
+	// GPIOB_MODER &= ~(3 << 12);    // Clear PB6 bit
+	// GPIOB_MODER |=  (1 << 12);    // Set PB6 to output mode
 	
 	// Set PA2 (TX) as AF7 for UART2 use case (serial console)
 	GPIOA_MODER &= ~(3 << 4);	// Clear PA2 bits
@@ -51,22 +53,50 @@ void gpio_config(void) {
         GPIOB_PUPDR  &= ~(3 << 22); 	// Clear
 	GPIOB_PUPDR  |=  (1 << 22); 	// Set pull ups
 
-	// Set PB6 as input for BMP390 data-ready interrupt
-	GPIOB_MODER &= ~(3 << 12);   	// Set PB6 to input mode
-	GPIOB_PUPDR &= ~(3 << 12);   	// Set NO pull-up/downs
+	// Set PB10 as input for BMP390 data-ready interrupt
+	GPIOB_MODER &= ~(3 << 20);   	// Set PB6 to input mode
+	GPIOB_PUPDR &= ~(3 << 20);   	// Set NO pull-up/downs
+
+	// Setup PC10,11,12 for SPI3 (BMI088)
+	GPIOC_MODER &= ~(0x3F << 20);   // Clear PC bits
+	GPIOC_MODER |=  (0x2A << 20);   // Set PC bits to AF mode
+	GPIOC_AFRH  &= ~(0xFFF << 8);   // Clear PC AF bits
+	GPIOC_AFRH  |=  (0x666 << 8);   // Set PC bits to AF6     
+	GPIOC_OSPEEDR &= ~(0x3F << 20); // Clear PC bits
+	GPIOC_OSPEEDR |= (0x2A << 20);  // Set PC bits to high speed
+
+	// Set PC6 & PC7 as input for BMI088 interrupts
+        GPIOC_MODER &= ~(0xF << 12);    // Set PC6 & PC7 to input mode
+        GPIOC_PUPDR &= ~(0xF << 12);    // Set NO pull-up/downs
+
+	// Set PC8, PC9 as BMI088 accel, gyro chip select pins
+	GPIOC_MODER &= ~(0xF << 16); // Clear bits
+	GPIOC_MODER |=  (0x5 << 16); // Set PC8, PC8 as output pins
 }
 
 void syscfg_enable(void) {
-	// Configure EXTI system - line 6 from Port B
-	SYSCFG_EXTICR2 &= ~(0xF << 8);  // Clear EXTI6 bits
-	SYSCFG_EXTICR2 |=  (0x1 << 8);  // Port B, line 6 
+	// PB10 - Pressure/Temp Interrupt
+	SYSCFG_EXTICR3 &= ~(0xF << 8);
+	SYSCFG_EXTICR3 |=  (0x1 << 8);
+	// PC6 - Accel Interrupt
+	SYSCFG_EXTICR2 &= ~(0xF << 8);
+	SYSCFG_EXTICR2 |=  (0x2 << 8);
+	// PC7 - Gyro Interrupt
+	SYSCFG_EXTICR2 &= ~(0xF << 12);
+        SYSCFG_EXTICR2 |=  (0x2 << 12);
 }
 
 void exti_enable(void) {
-	// Setup EXTI 
-	EXTI_IMR1  |=  (1 << 6);   // Unmask interrupt on line 6
-	EXTI_RTSR1 |=  (1 << 6);   // Trigger on rising edge
-	EXTI_FTSR1 &= ~(1 << 6);   // Disable falling edge
+	// Setup PB10 EXTI 
+	EXTI_IMR1  |=  (1 << 10);   // Unmask interrupt
+	EXTI_RTSR1 |=  (1 << 10);   // Trigger on rising edge
+	EXTI_FTSR1 &= ~(1 << 10);   // Disable falling edge
+	// PC6 EXTI
+	EXTI_IMR1  |=  (1 << 6); 
+	EXTI_RTSR1 |=  (1 << 6);
+	// PC7 EXTI
+	EXTI_IMR1  |=  (1 << 7);
+        EXTI_RTSR1 |=  (1 << 7);
 }
 
 void tim2_enable(void) {

@@ -22,8 +22,10 @@
 
 #define GPIOA_MODER   (*(volatile uint32_t*)0x48000000) // GPIOA mode
 #define GPIOA_OTYPER  (*(volatile uint32_t*)0x48000004) // GPIOA Type - Open drain vs push/pull 
+#define GPIOA_OSPEEDR (*(volatile uint32_t*)0x48000008) // GPIOA output speed 
 #define GPIOA_ODR     (*(volatile uint32_t*)0x48000014) // GPIOA output data
 #define GPIOA_AFRL    (*(volatile uint32_t*)0x48000020) // GPIOA alternate function LO
+#define GPIOA_AFRH    (*(volatile uint32_t*)0x48000024) // GPIOA alt function register
 #define GPIOA_PUPDR   (*(volatile uint32_t*)0x4800000C) // GPIOA pull up/down
 
 #define GPIOB_MODER   (*(volatile uint32_t*)0x48000400) // GPIOB base address/mode
@@ -34,6 +36,15 @@
 #define GPIOB_BSRR    (*(volatile uint32_t*)0x48000418) // GPIOB bit set/reset register
 #define GPIOB_PUPDR   (*(volatile uint32_t*)0x4800040C) // GPIOB pull up/down register
 #define GPIOB_AFRH    (*(volatile uint32_t*)0x48000424) // GPIOB alt function register
+
+#define GPIOC_MODER   (*(volatile uint32_t*)0x48000800) // GPIOC base address/mode
+#define GPIOC_OTYPER  (*(volatile uint32_t*)0x48000804) // Type - Open drain vs push/pull
+#define GPIOC_OSPEEDR (*(volatile uint32_t*)0x48000808) // GPIOC output speed register
+#define GPIOC_IDR     (*(volatile uint32_t*)0x48000810) // GPIOC input data register
+#define GPIOC_ODR     (*(volatile uint32_t*)0x48000814) // GPIOC output data register
+#define GPIOC_BSRR    (*(volatile uint32_t*)0x48000818) // GPIOC bit set/reset register
+#define GPIOC_PUPDR   (*(volatile uint32_t*)0x4800080C) // GPIOC pull up/down register
+#define GPIOC_AFRH    (*(volatile uint32_t*)0x48000824) // GPIOC alt function register
 
 #define I2C1_CR1      (*(volatile uint32_t*)0x40005400) // I2C1 configuration register
 #define I2C1_CR2      (*(volatile uint32_t*)0x40005404) // I2C1 transaction/control register
@@ -59,11 +70,16 @@
 #define USART3_RDR    (*(volatile uint32_t*)0x40004824) // USART3 receive data register
 #define USART3_TDR    (*(volatile uint32_t*)0x40004828) // USART3 transmit data register
 
-#define SYSCFG_EXTICR2 (*(volatile uint32_t*)0x4001000C)  
+#define SYSCFG_EXTICR2 (*(volatile uint32_t*)0x4001000C) // SYSCFG external interrupt config [4-7] 
+#define SYSCFG_EXTICR3 (*(volatile uint32_t*)0x40010010) // SYSCFG external interrupt config [8-11]
 
-#define EXTI_IMR1     (*(volatile uint32_t*)0x40010400)
-#define EXTI_RTSR1    (*(volatile uint32_t*)0x40010408)
-#define EXTI_FTSR1    (*(volatile uint32_t*)0x4001040C)
-#define EXTI_PR1      (*(volatile uint32_t*)0x40010414)
+#define EXTI_IMR1     (*(volatile uint32_t*)0x40010400) // EXTI interrupt mask register 
+#define EXTI_RTSR1    (*(volatile uint32_t*)0x40010408) // EXTI rising trigger selection register
+#define EXTI_FTSR1    (*(volatile uint32_t*)0x4001040C) // EXTI falling trigger selection register 
+#define EXTI_PR1      (*(volatile uint32_t*)0x40010414) // EXTI pending interrupt flag register 
+
+#define SPI3_CR1      (*(volatile uint32_t*)0x40003C00) // SPI3 control register
+#define SPI3_SR       (*(volatile uint32_t*)0x40003C08) // SPI3 status register
+#define SPI3_DR       (*(volatile uint32_t*)0x40003C0C) // SPI3 data register
 
 #endif
