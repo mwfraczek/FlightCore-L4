@@ -66,6 +66,5 @@ void bmp390_coeffconvert(const bmp_coeff_t *c, bmp_par_t *p);
 float bmp390_temp(uint32_t raw_temp, bmp_par_t *p);
 float bmp390_pressure(uint32_t raw_press, bmp_par_t *p);
 void print_bmp390(float temp, float press);
-void EXTI9_5_IRQHandler(void);
 
 #endif

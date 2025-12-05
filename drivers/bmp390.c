@@ -167,9 +167,9 @@ void print_bmp390(float temp, float press) {
 
 // BMP390 Data Ready External Interrupt
 volatile uint8_t bmp_data_ready = 0;
-void EXTI9_5_IRQHandler(void) {
-	if (EXTI_PR1 & (1 << 6)) {   // Check if interrupt flag is raised
-		EXTI_PR1 = (1 << 6); // Clear interrupt flag bit
+void EXTI15_10_IRQHandler(void) {
+	if (EXTI_PR1 & (1 << 10)) {   // Check if interrupt flag is raised
+		EXTI_PR1 = (1 << 10); // Clear interrupt flag bit
 		bmp_data_ready = 1;  // Data is ready signal
 	}
 }
