@@ -18,6 +18,11 @@ int main(void) {
 	bmp_coeff_t cal_raw; 	// raw coeffs
 	bmp_par_t cal;		// converted coeffs
 	bmp_raw_t raw;		// raw readings
+	bmi_raw_t accel_raw;	// BMI088 raw accel reading
+	bmi_raw_t gyro_raw;	// BMI088 raw gyro reading
+	uint8_t accel_chipid;	// BMI088 accel chip ID (expect 0x1E / 30)
+	uint8_t gyro_chipid;	// BMI088 gyro chip ID (expect 0x0F / 15)
+	uint32_t chipid_last_tick = 0;
 
 	// Setup STM32 Peripherals 
 	rcc_enable();
@@ -50,12 +55,24 @@ int main(void) {
 	// BMI088 Setup
 	bmi088_setup();
 
-	// Read and Convert Sensor Calibration Coefficients 
+	// Read and Convert Sensor Calibration Coefficients
 	bmp390_coeffdata(&cal_raw);
         bmp390_coeffconvert(&cal_raw, &cal);
 	
-	// Output Temp, Pressure, GPS Values via UART 
+	// Output Temp, Pressure, GPS Values via UART
 	while (1) {
+		// Re-print BMI088 chip IDs every ~2s (expect 30 = 0x1E, 15 = 0x0F)
+		if (tick_ms - chipid_last_tick >= 2000) {
+			chipid_last_tick = tick_ms;
+			bmi088_accel_chipid(&accel_chipid);
+			bmi088_gyro_chipid(&gyro_chipid);
+			usart2_transmitstr("Accel ChipID: ");
+			usart2_transmitint(accel_chipid);
+			usart2_transmitstr("\r\n");
+			usart2_transmitstr("Gyro ChipID: ");
+			usart2_transmitint(gyro_chipid);
+			usart2_transmitstr("\r\n");
+		}
 		// Pull raw data, convert, output
 		if (bmp_data_ready) {
 			bmp_data_ready = 0;
@@ -69,6 +86,17 @@ int main(void) {
 			if (strncmp(gpsdata, "$GPRMC", 6) == 0) {
 				print_gps(gpsdata);
 			}
+		}
+		// Pull raw BMI088 data, output
+		if (bmi_accel_data_ready) {
+			bmi_accel_data_ready = 0;
+			bmi088_accel_data(&accel_raw);
+			print_bmi088(&accel_raw, &gyro_raw);
+		}
+		if (bmi_gyro_data_ready) {
+			bmi_gyro_data_ready = 0;
+			bmi088_gyro_data(&gyro_raw);
+			print_bmi088(&accel_raw, &gyro_raw);
 		}
 	}
 }

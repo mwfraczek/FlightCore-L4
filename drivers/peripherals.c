@@ -70,8 +70,9 @@ void gpio_config(void) {
         GPIOC_PUPDR &= ~(0xF << 12);    // Set NO pull-up/downs
 
 	// Set PC8, PC9 as BMI088 accel, gyro chip select pins
+	GPIOC_ODR    |=  (3 << 8);   // Pre-set CS HIGH before enabling output mode
 	GPIOC_MODER &= ~(0xF << 16); // Clear bits
-	GPIOC_MODER |=  (0x5 << 16); // Set PC8, PC8 as output pins
+	GPIOC_MODER |=  (0x5 << 16); // Set PC8, PC9 as output pins
 }
 
 void syscfg_enable(void) {

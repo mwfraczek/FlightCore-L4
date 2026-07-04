@@ -78,8 +78,9 @@
 #define EXTI_FTSR1    (*(volatile uint32_t*)0x4001040C) // EXTI falling trigger selection register 
 #define EXTI_PR1      (*(volatile uint32_t*)0x40010414) // EXTI pending interrupt flag register 
 
-#define SPI3_CR1      (*(volatile uint32_t*)0x40003C00) // SPI3 control register
+#define SPI3_CR1      (*(volatile uint32_t*)0x40003C00) // SPI3 control register 1
+#define SPI3_CR2      (*(volatile uint32_t*)0x40003C04) // SPI3 control register 2
 #define SPI3_SR       (*(volatile uint32_t*)0x40003C08) // SPI3 status register
-#define SPI3_DR       (*(volatile uint32_t*)0x40003C0C) // SPI3 data register
+#define SPI3_DR       (*(volatile uint8_t*)0x40003C0C)  // SPI3 data register (8-bit access to match FRXTH/8-bit frame)
 
 #endif

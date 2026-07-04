@@ -44,6 +44,12 @@ void usart2_transmitint(int value) {
 		return;
 	}
 
+	// Handle negative values
+	if (value < 0) {
+		usart2_transmit('-');
+		value = -value;
+	}
+
 	// Convert digits to characters in reverse
 	while (value > 0 && i < sizeof(buf) - 1) {
 		buf[i++] = (value % 10) + '0';
