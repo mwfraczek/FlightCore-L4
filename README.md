@@ -18,15 +18,9 @@ This project contains embedded C firmware for the **STM32** Nucleo-L476RG, inter
 - https://youtu.be/9T74qPDPzVY
 
 
-## Future Work: 🚧 
-- Pull IMU data and apply sensor-fusion algorithm to produce practical orientation vector. 
-- Parse NMEA sentences to extract time, longitude, latitude, and altitude.
-
-
 ## Hardware Requirements: 🧰
-- **MCU:** Nucleo-L476RG (STM32L476RG).
-- **Device:** BMP390 Breakout Board - GT-U7 GPS Module - BMI088 Shuttle Board
-- **Configuration:** -To Be Updated-
+- **MCU:** Nucleo-L476RG (STM32L476RG)
+- **Device:** BMP390 Breakout Board - BMI088 Breakout Board - GT-U7 GPS Module
 
 
 ## Build Instructions: 🛠️
