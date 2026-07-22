@@ -2,35 +2,38 @@
 This project contains embedded C firmware for the **STM32** Nucleo-L476RG, interfacing with a **BMP390 Pressure and Temperature sensor**, a **BMI088 IMU**, and a GT-U7 **GPS module**. All peripherals and devices are configured in a bare-metal environment directly from relevant Reference Manuals and Datasheets. The goal is to build a strong foundation in embedded systems while expanding the project's functionality for a model rocket flight controller application.
 
 
-## Features: 🔧
+## Features:
 - Bare-metal STM32L4 firmware. 
 - Interrupt-driven data handling for non-blocking, real-time operation. 
 - I2C driver for BMP390 pressure and temperature sensor.
 - SPI driver for BMI088 accelerometer and gyroscope sensor.
-- UART drivers for GPS input (USART3) and serial output (USART2).
+- UART driver for GPS input (USART3) and serial output (USART2).
 - Floating-point conversion of BMP390 raw measurement data.
 - Ring-buffer GPS parser for continuous NMEA sentence extraction.
 - Python logging script for UART output capture and CSV generation. 
 
 
-## Demonstration: 🎥
-**Hardware & Data Stream Demo:** 
-- https://youtu.be/9T74qPDPzVY
+## Demonstration:
+-*Pressure/Temp & GPS Data Stream Demo:* 
+https://youtu.be/9T74qPDPzVY
+    
+-*IMU & TVC Gimbal Mount Demo:*
+https://youtu.be/XmHrOLPTf48
 
-
-## Hardware Requirements: 🧰
+    
+## Hardware Requirements:
 - **MCU:** Nucleo-L476RG (STM32L476RG)
-- **Device:** BMP390 Breakout Board - BMI088 Breakout Board - GT-U7 GPS Module
+- **Devices:** BMP390 Breakout Board - BMI088 Breakout Board - GT-U7 GPS Module
 
 
-## Build Instructions: 🛠️
+## Build Instructions:
 - **Install** ARM GCC toolchain: `sudo apt install gcc-arm-none-eabi`
 - **Clone** repo: `git clone https://github.com/mwfraczek/FlightCore-L4.git`
 - **Build**: `make` 
 - **Flash**: `st-flash --reset write bin/main.bin 0x08000000` or use STM32CubeIDE
 
 
-## Directory Structure: 📂
+## Directory Structure:
     .
     ├── bin/
     ├── build/
@@ -68,9 +71,3 @@ This project contains embedded C firmware for the **STM32** Nucleo-L476RG, inter
         ├── main.c
         ├── startup.s
         └── system.c
-
-
-## Contributions: 👤
-- **Author:** Michael Fraczek 
-- **Contact** mwfraczek@icloud.com
-- Open to collaboration & feedback!
